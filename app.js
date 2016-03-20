@@ -5,7 +5,7 @@
 var martaApi = require('./marta_api.js')
 var martaApiInstance = new martaApi()
 
-var appId = 'amzn1.echo-sdk-ams.app.7f03e034-0a89-447c-88e7-6b5caabb2dd9'
+var appId = 'amzn1.echo-sdk-ams.app.655fae42-075f-4425-827b-8999daeb188a'
 
 //NEW
 var express = require('express');
