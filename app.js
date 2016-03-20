@@ -47,10 +47,12 @@ echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, 
 
 function handleError(errorText, callback, sessionObject) {
   console.log("Error: " + errorText);
-  callback(shouldEndSession, errorText, "Error", errorText, "", sessionObject);
+  callback(true, errorText, "Error", errorText, "", sessionObject);
 }
 
 echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, userObject, intent){
+    //not sure what this is
+    sessionObject = false;
     if(intent.name === 'Marta'){
         if(intent.slots) {
           console.log("FULL INTENT: " + util.inspect(intent, false, null));
