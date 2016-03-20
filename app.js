@@ -79,6 +79,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
 
             var speechText = "The next" + direction + "bound train will arrive at " + station + "station in " + result;
             var cardTitle = direction + "train at " + station + " in " + result;
+            console.log("SPEECH TEXT: " + speechText);
             callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
             return;
           })
