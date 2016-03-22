@@ -1,4 +1,6 @@
 
+var unirest, martaApiBaseUrl
+
 var Marta = function() {
 	unirest = require('unirest')
 	martaApiBaseUrl = "http://developer.itsmarta.com/RealtimeTrain/RestServiceNextTrain/GetRealtimeArrivals?apiKey="
@@ -6,33 +8,28 @@ var Marta = function() {
 
 Marta.prototype.makeMartaGetRequest = function (station, direction, callback) {
 	responseParser = require('./marta_response_parser.js')
-	api_key = ''
-	// unirest.get(martaApiBaseUrl + api_key)
-	// .header("X-Mashape-Key", "93O1KXOHn0mshXUKCGb7ZBUnskj0p1RC5ecjsnonegr5j8IxHb")
-	// .header("Accept", "application/json")
-	// .query(parameters)
-	// .end(function (result) {
-	//   console.log(result.status, result.headers, result.body)
-	//   callback(null, result)
-	// })
-	response = {body:'[{"DESTINATION": "Airport","DIRECTION": "S","EVENT_TIME": "3/12/2014 5:40:28 PM", "NEXT_ARR": "05:40:37 PM"},\
-		{"DESTINATION": "Midtown","DIRECTION": "N","EVENT_TIME": "3/12/2014 6:20:28 PM", "NEXT_ARR": "06:20:37 PM"},\
-		{"DESTINATION": "North Avenue","DIRECTION": "N","EVENT_TIME": "3/12/2014 5:40:28 PM", "NEXT_ARR": "05:40:37 PM"}]'}
-	console.log("Destination: " + station)
-	console.log("Direction: " + direction)
-	responseParser.prototype.getResultsByDirectionAndStation(response.body, direction, station, function getEvent(events){
-		console.log(events)
-		if(events.length > 0) {
-			responseParser.prototype.getArrivalTimeFromEvent(events[0], function returnTime(err, timeOfArrival){
-				responseParser.prototype.getMinutesUntilArrival(timeOfArrival, function returnMinutesUntilArrival(err, minutesUntilArrival) {
-					callback(err, minutesUntilArrival)
+	var api_key = process.env.MARTA_API_KEY
+	console.log("API KEY: " + api_key)
+	unirest.get(martaApiBaseUrl + api_key)
+	.header("Accept", "application/json")
+	.end(function (result) {
+		console.log("Destination: " + station)
+		console.log("Direction: " + direction)
+		responseParser.prototype.getResultsByDirectionAndStation(result.body, direction, station, function getEvent(events){
+			console.log(events)
+			if(events.length > 0) {
+				responseParser.prototype.getArrivalTimeFromEvent(events[0], function returnTime(err, timeOfArrival){
+					responseParser.prototype.getMinutesUntilArrival(timeOfArrival, function returnMinutesUntilArrival(err, minutesUntilArrival) {
+						callback(err, minutesUntilArrival)
+					})
+					
 				})
-				
-			})
-		} else {
-			callback("No events found for that station/direction", null)
-		}
-		
+			} else {
+				callback("No events found for that station/direction", null)
+			}
+			
+		})
+	  callback(null, result)
 	})
 }
 
@@ -64,7 +61,8 @@ Marta.testGetTime = function(test){
     	test.done();
 	})
 };
-Marta.prototype.getTime("Midtown", "North", function printResult(err, result) {
+var myMarta = new Marta();
+myMarta.getTime("MIDTOWN STATION", "North", function printResult(err, result) {
 	console.log('Result: ' + result)
 })
 module.exports = Marta
