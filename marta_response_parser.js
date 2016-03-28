@@ -1,24 +1,16 @@
 var ResponseParser = function() {}
 
-ResponseParser.prototype.getResultsByStation = function (apiResponse, station, callback) {
-	parsedResponse = JSON.parse(apiResponse)
-	result = parsedResponse.filter(function (event) {
-		return event.DESTINATION === station
-	})
-	callback(result)
-}
-
-ResponseParser.prototype.getResultsByDirection = function (apiResponse, direction, callback) {
-	parsedResponse = JSON.parse(apiResponse)
-	result = parsedResponse.filter(function (event) {
-		return event.DIRECTION === direction[0]
-	})
-	callback(result)
-}
-
-ResponseParser.prototype.getResultsByDirectionAndStation = function (apiResponse, direction, station, callback) {
-	var parsedResponse = apiResponse //JSON.parse(apiResponse)
+/**
+ * Filters the API results down to the event for a specific station and train direction
+ * @param {Object} parsedResponse 
+ * @param {String} station 
+ * @param {String} direction
+ * @param {Function} callback
+ */
+ResponseParser.prototype.getResultsByDirectionAndStation = function (parsedResponse, direction, station, callback) {
 	filteredByDirection = parsedResponse.filter(function (event) {
+		//only use the first word of the station name and convert to lower case 
+		//to improve chance of a successful match
 		return event.DIRECTION.split(' ')[0].toLowerCase() === direction[0].split(' ')[0].toLowerCase()
 	})
 	filteredByDirectionAndStation = parsedResponse.filter(function (event) {
@@ -27,6 +19,11 @@ ResponseParser.prototype.getResultsByDirectionAndStation = function (apiResponse
 	callback(filteredByDirectionAndStation)
 }
 
+/**
+ * Returns the arrival time from an API event as a JavaScript Date object
+ * @param {Object} event
+ * @param {Function} callback
+ */
 ResponseParser.prototype.getArrivalTimeFromEvent = function (event, callback) {
 	time = event.NEXT_ARR.split(/[\s:]+/)
 	date = event.EVENT_TIME.split(/[\/\s]+/)
@@ -41,6 +38,11 @@ ResponseParser.prototype.getArrivalTimeFromEvent = function (event, callback) {
 	callback(null, new Date(year, month, day, hour, minute, second, millisecond))
 }
 
+/**
+ * Calculates the minutes between the estimated arrival time and current time
+ * @param {Date} time
+ * @param {Function} callback
+ */
 ResponseParser.prototype.getMinutesUntilArrival = function (time, callback) {
 	now = new Date()
 	callback(null, time.getUTCMinutes() - now.getUTCMinutes())
