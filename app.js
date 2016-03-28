@@ -70,7 +70,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
             handleError("Must specify a Marta station", callback, sessionObject);
           }
           
-          martaApiInstance.getPassage(station, direction, function logResult(err, result) {
+          martaApiInstance.getTime(station, direction, function logResult(err, result) {
            console.log(result)
            var shouldEndSession = true;
            var cardSubtitle = "userId " + userId;
