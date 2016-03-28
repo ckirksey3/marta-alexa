@@ -1,13 +1,8 @@
 /**
  * Module dependencies.
  */
-
 var martaApi = require('./marta_api.js')
 var martaApiInstance = new martaApi()
-
-var appId = 'amzn1.echo-sdk-ams.app.655fae42-075f-4425-827b-8999daeb188a'
-
-//NEW
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -19,16 +14,18 @@ var redisURL = url.parse(process.env.REDISCLOUD_URL); //Heroku Redis
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 client.auth(redisURL.auth.split(":")[1]);
 
-
+//Setup for Express server
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 
-
+var appId = 'amzn1.echo-sdk-ams.app.655fae42-075f-4425-827b-8999daeb188a' //Amazon Echo App ID
 var echoApp = new AmazonEchoApp(client, "marta-times", appId);
+
 echoApp.decorateAppWithRoutes('/', app);
 
+//Handle Echo Launch Request with welcome message
 echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, userObject){
     var shouldEndSession = false;
     var speechText = "Welcome to the Marta App";
@@ -45,13 +42,14 @@ echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, 
     callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
 });
 
+//Print any errors
 function handleError(errorText, callback, sessionObject) {
   console.log("Error: " + errorText);
   callback(true, errorText, "Error", errorText, "", sessionObject);
 }
 
+//Handle Echo request for train time
 echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, userObject, intent){
-    //not sure what this is
     sessionObject = false;
     if(intent.name === 'Marta'){
         if(intent.slots) {
@@ -60,6 +58,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
           console.log("STATION: " + util.inspect(intent.slots['Station'], false, null));
           var direction, station;
           
+          //only support request with both a direction and a station
           station = intent.slots['Station'].value;
           if(station) {
             direction = intent.slots['Direction'].value;
@@ -70,10 +69,11 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
             handleError("Must specify a Marta station", callback, sessionObject);
           }
           
+          //request an estimated arrival time for that train/direction from the Marta API
           martaApiInstance.getTime(station, direction, function logResult(err, result) {
-           console.log(result)
-           var shouldEndSession = true;
-           var cardSubtitle = "userId " + userId;
+            console.log(result)
+            var shouldEndSession = true;
+            var cardSubtitle = "userId " + userId;
             var cardContents = result;
             var sessionObject = false;
 
@@ -89,25 +89,6 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
       return;
     }
 });
-
-echoApp.on(echoApp.TYPE_WEB_USER_DISPLAY, function(callback, userId, command, userObject){
-    //This route is called when a user is directed to:
-    // https://myurl.com/approute/input/"+userId;
-    html = '<h1>Hello World</h1>';  
-    callback(html);
-});
-
-echoApp.on(echoApp.TYPE_WEB_USER_INPUT, function(callback, userId, command, inputObj, userObject){
-    //This route is called when data is posted to:
-    // https://myurl.com/approute/input/"+userId;
-
-    var message = "Got posted data.";
-    //for example, if you collect username and password for a third party integration
-    userObject = {email: inputObj.email,password: inputObj.password};
-    callback(message, userObject);
-    //user object will now be encrypted and stored in redis. It will automatically be decrypted and passed into to future events invoked by this user   
-});
-
 
 app.listen(app.get('port'), function() {
     console.log("Node app is running at localhost:" + app.get('port'));
