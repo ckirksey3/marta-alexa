@@ -48,4 +48,28 @@ ResponseParser.prototype.getMinutesUntilArrival = function (time, callback) {
 	callback(null, time.getUTCMinutes() - now.getUTCMinutes())
 }
 
+/**
+ * Unit tests the getResultsByDirectionAndStation function
+ * execute 'nodeunit marta_response_parser.js' to run
+ * @param {Object} test
+ */
+ResponseParser.testGetTime = function(test){
+	var input = [{STATION: "Airport",DIRECTION: "S",EVENT_TIME: "3/12/2014 5:40:28 PM", NEXT_ARR: "05:40:37 PM"},
+		{STATION: "Midtown",DIRECTION: "N",EVENT_TIME: "3/12/2014 6:20:28 PM", NEXT_ARR: "06:20:37 PM"},
+		{STATION: "Midtown",DIRECTION: "N",EVENT_TIME: "3/12/2014 5:40:28 PM", NEXT_ARR: "05:40:37 PM"}];
+	var parser = new ResponseParser();
+	parser.getResultsByDirectionAndStation(input, "S", "Airport", function logResult(result) {
+	   	var expectedOutput = [{DESTINATION: "Airport",DIRECTION: "S",EVENT_TIME: "3/12/2014 5:40:28 PM", NEXT_ARR: "05:40:37 PM"}]
+	   	test.equal(result.length, expectedOutput.length, "Parsing function returned inaccurate number of matching events");  
+	   	test.equal(result[0].EVENT_TIME, expectedOutput[0].EVENT_TIME, "Airport arrival time was not parsed correctly");  
+	})
+	parser.getResultsByDirectionAndStation(input, "N", "Midtown", function logResult(result) {
+	   	var expectedOutput = [{STATION: "Midtown",DIRECTION: "N",EVENT_TIME: "3/12/2014 6:20:28 PM", NEXT_ARR: "06:20:37 PM"},
+		{STATION: "Midtown",DIRECTION: "N",EVENT_TIME: "3/12/2014 5:40:28 PM", NEXT_ARR: "05:40:37 PM"}];
+	   	test.equal(result.length, expectedOutput.length, "Parsing function returned inaccurate number of matching events");  
+	   	test.equal(result[0].EVENT_TIME, expectedOutput[0].EVENT_TIME, "First Midtown arrival time was not parsed correctly");  
+	})
+	test.done();
+};
+
 module.exports = ResponseParser
