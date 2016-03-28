@@ -19,12 +19,10 @@ ResponseParser.prototype.getResultsByDirection = function (apiResponse, directio
 ResponseParser.prototype.getResultsByDirectionAndStation = function (apiResponse, direction, station, callback) {
 	var parsedResponse = apiResponse //JSON.parse(apiResponse)
 	filteredByDirection = parsedResponse.filter(function (event) {
-		//console.log(event.DIRECTION + " =? " + direction[0])
-		return event.DIRECTION === direction[0]
+		return event.DIRECTION.split(' ')[0].toLowerCase() === direction[0].split(' ')[0].toLowerCase()
 	})
 	filteredByDirectionAndStation = parsedResponse.filter(function (event) {
-		//console.log(event.STATION + " =? " + station)
-		return event.STATION === station
+		return event.STATION.split(' ')[0].toLowerCase() === station.split(' ')[0].toLowerCase()
 	})
 	callback(filteredByDirectionAndStation)
 }

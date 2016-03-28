@@ -9,14 +9,12 @@ var Marta = function() {
 Marta.prototype.makeMartaGetRequest = function (station, direction, callback) {
 	responseParser = require('./marta_response_parser.js')
 	var api_key = process.env.MARTA_API_KEY
-	console.log("API KEY: " + api_key)
 	unirest.get(martaApiBaseUrl + api_key)
 	.header("Accept", "application/json")
 	.end(function (result) {
 		console.log("Destination: " + station)
 		console.log("Direction: " + direction)
 		responseParser.prototype.getResultsByDirectionAndStation(result.body, direction, station, function getEvent(events){
-			console.log(events)
 			if(events.length > 0) {
 				responseParser.prototype.getArrivalTimeFromEvent(events[0], function returnTime(err, timeOfArrival){
 					responseParser.prototype.getMinutesUntilArrival(timeOfArrival, function returnMinutesUntilArrival(err, minutesUntilArrival) {
@@ -35,7 +33,6 @@ Marta.prototype.makeMartaGetRequest = function (station, direction, callback) {
 
 Marta.prototype.getTime = function (station, direction, callback) {
 	this.makeMartaGetRequest(station, direction, function parseResponse(error, result) {
-		console.log("getPass returned")
 		//remove verse numbers
 		var martaText = result;
 
@@ -61,8 +58,5 @@ Marta.testGetTime = function(test){
     	test.done();
 	})
 };
-var myMarta = new Marta();
-myMarta.getTime("MIDTOWN STATION", "North", function printResult(err, result) {
-	console.log('Result: ' + result)
-})
+
 module.exports = Marta
