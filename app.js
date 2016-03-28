@@ -77,7 +77,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
             var cardContents = result;
             var sessionObject = false;
 
-            var speechText = "The next" + direction + "bound train will arrive at " + station + "station in " + result + " minutes";
+            var speechText = "The next " + direction + " bound train will arrive at " + station + " station in " + result + " minutes";
             var cardTitle = direction + "train at " + station + " in " + result;
             console.log("SPEECH TEXT: " + speechText);
             callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
