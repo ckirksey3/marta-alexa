@@ -65,7 +65,7 @@ Marta.prototype.getTimesByStation = function (station, direction, callback) {
 								if(err) {
 									callback(err, null)
 								} else {
-									results.add({direction: event.DIRECTION, minutesUntilArrival: minutesUntilArrival})
+									results.push({direction: event.DIRECTION, minutesUntilArrival: minutesUntilArrival})
 								}
 							})
 						}
