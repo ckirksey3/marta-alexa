@@ -1,16 +1,15 @@
 /**
  * Module dependencies.
  */
-var martaApi = require('./marta_api.js')
-var martaApiInstance = new martaApi()
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var AmazonEchoApp = require('node-alexa');
 var redis = require('redis');
 var url = require('url');
-var util = require('util');
 var redisURL = url.parse(process.env.REDISCLOUD_URL); //Heroku Redis
+var speechHandler = require('./speech-handler.js')
+var speechHandlerInstance = new SpeechHandler()
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 client.auth(redisURL.auth.split(":")[1]);
 
@@ -27,7 +26,6 @@ echoApp.decorateAppWithRoutes('/', app);
 
 //Handle Echo Launch Request with welcome message
 echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, userObject){
-    var shouldEndSession = false;
     var speechText = "Welcome to the Marta App";
     var cardTitle = "Marta App Launched";
     var cardSubtitle = "userId " + userId;
@@ -39,50 +37,19 @@ echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, 
     else{
         //this user has a long term storage session 
     }
-    callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+    callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
 });
-
-//Print any errors
-function handleError(errorText, callback, sessionObject) {
-  console.log("Error: " + errorText);
-  callback(true, errorText, "Error", errorText, "", sessionObject);
-}
 
 //Handle Echo request for train time
 echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, userObject, intent){
     sessionObject = false;
     if(intent.name === 'Marta'){
         if(intent.slots) {
-          console.log("FULL INTENT: " + util.inspect(intent, false, null));
-          console.log("SLOTS: " + util.inspect(intent.slots, false, null));
-          console.log("STATION: " + util.inspect(intent.slots['Station'], false, null));
-          var direction, station;
-          
-          //only support request with both a direction and a station
-          station = intent.slots['Station'].value;
-          if(station) {
-            direction = intent.slots['Direction'].value;
-            if(!direction) {
-              handleError("Must specify which direction for " + station, callback, sessionObject);
-            }
-          } else {
-            handleError("Must specify a Marta station", callback, sessionObject);
-          }
-          
-          //request an estimated arrival time for that train/direction from the Marta API
-          martaApiInstance.getTime(station, direction, function logResult(err, result) {
-            console.log(result)
-            var shouldEndSession = true;
-            var cardSubtitle = "userId " + userId;
-            var cardContents = result;
-            var sessionObject = false;
-
-            var speechText = "The next " + direction + " bound train will arrive at " + station + " station in " + result + " minutes";
-            var cardTitle = direction + " bound train arrives at " + station + " in " + result + " minutes";
-            console.log("SPEECH TEXT: " + speechText);
-            callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
-            return;
-          })
+          speechHandlerInstance.handleMartaRequest(intent, callback);
+          return;
+        } else {
+          echoApp.returnErrorResponse(callback, "Missing required inputs, please try again");
+          return;
         }
     } else {
       echoApp.returnErrorResponse(callback, "Sorry, nobody has implemented the command "+intent.name);
