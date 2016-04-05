@@ -33,32 +33,12 @@ ResponseParser.prototype.getResultsByStation = function (parsedResponse, station
 }
 
 /**
- * Returns the arrival time from an API event as a JavaScript Date object
+ * Returns the minutes until arrival from an API event
  * @param {Object} event
  * @param {Function} callback
  */
-ResponseParser.prototype.getArrivalTimeFromEvent = function (event, callback) {
-	time = event.NEXT_ARR.split(/[\s:]+/)
-	date = event.EVENT_TIME.split(/[\/\s]+/)
-	isPM = (time[3] == 'PM') ? 12:0
-	month = parseInt(date[0]) - 1
-	day = parseInt(date[1])
-	year = parseInt(date[2])
-	hour = parseInt(time[0]) + isPM
-	minute = parseInt(time[1])
-	second = parseInt(time[2])
-	millisecond = 0
-	callback(null, new Date(year, month, day, hour, minute, second, millisecond))
-}
-
-/**
- * Calculates the minutes between the estimated arrival time and current time
- * @param {Date} time
- * @param {Function} callback
- */
-ResponseParser.prototype.getMinutesUntilArrival = function (time, callback) {
-	now = new Date()
-	callback(null, time.getUTCMinutes() - now.getUTCMinutes())
+ResponseParser.prototype.getMinutesUntilArrivalFromEvent = function (event, callback) {
+	callback(Math.round(event.WAITING_SECONDS/60))
 }
 
 /**

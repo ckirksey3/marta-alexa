@@ -19,7 +19,7 @@ function handleError(errorText, sessionObject, callback) {
  * @param {Function} callback
  */
 SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
-	console.log("FULL INTENT: " + util.inspect(intent, false, null));
+	//console.log("FULL INTENT: " + util.inspect(intent, false, null));
 	console.log("SLOTS: " + util.inspect(intent.slots, false, null));
 	console.log("STATION: " + util.inspect(intent.slots['Station'], false, null));
 	var direction, station;
