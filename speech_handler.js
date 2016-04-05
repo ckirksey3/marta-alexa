@@ -56,19 +56,29 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 				handleError("The Marta API is currently down", sessionObject, callback);
 			} else {
 				console.log(result)
-				speechText = "The " + station + " station has trains arriving ";
-				cardTitle = "The " + station + " station has trains arriving ";
+				speechText = "The " + station + " station has trains arriving";
+				cardTitle = "The " + station + " station has trains arriving";
+				var directions = {
+					"N": "North",
+					"S": "South",
+					"E": "East",
+					"W": "West"
+				}
 				result.forEach(function(event) {
-					speechText += "going " + direction + " in " + result + " minutes";
-					cardTitle += "going " + direction + " in " + result + " minutes";
+					if(event.direction in directions) {
+						speechText += " going " + directions[event.direction] + " in " + event.minutesUntilArrival + " minutes";
+						cardTitle += " going " + directions[event.direction] + " in " + event.minutesUntilArrival + " minutes";
+
+						//remove the key so that we only list times for a direction once
+						delete directions[event.direction]
+					}
+					
 				})
 				console.log("SPEECH TEXT: " + speechText);
 				callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
 			}
-				
 		})
 	}
-	
 	return;
 }
 
@@ -103,5 +113,23 @@ SpeechHandler.testHandleMartaRequest = function(test){
 	})
 	test.done();
 };
+
+var SpeechHandler = new SpeechHandler()
+var myIntent = {
+  "name": "Marta",
+  "slots": {
+    "Station": {
+      "name": "Station",
+      "value": "Midtown"
+    },
+    "Direction": {
+      "name": "Direction"
+    }
+  }
+};
+
+SpeechHandler.handleMartaRequest(myIntent, function callback( isTrue, speechText) {
+	console.log("SPEECH TEXT: " + speechText)
+})
 
 module.exports = SpeechHandler
