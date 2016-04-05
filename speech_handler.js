@@ -114,22 +114,4 @@ SpeechHandler.testHandleMartaRequest = function(test){
 	test.done();
 };
 
-var SpeechHandler = new SpeechHandler()
-var myIntent = {
-  "name": "Marta",
-  "slots": {
-    "Station": {
-      "name": "Station",
-      "value": "Midtown"
-    },
-    "Direction": {
-      "name": "Direction"
-    }
-  }
-};
-
-SpeechHandler.handleMartaRequest(myIntent, function callback( isTrue, speechText) {
-	console.log("SPEECH TEXT: " + speechText)
-})
-
 module.exports = SpeechHandler

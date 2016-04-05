@@ -8,8 +8,8 @@ var AmazonEchoApp = require('node-alexa');
 var redis = require('redis');
 var url = require('url');
 var redisURL = url.parse(process.env.REDISCLOUD_URL); //Heroku Redis
-var speechHandler = require('./speech_handler.js')
-var speechHandlerInstance = new speechHandler()
+var SpeechHandler = require('./speech_handler.js')
+var speechHandlerInstance = new SpeechHandler()
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 client.auth(redisURL.auth.split(":")[1]);
 
