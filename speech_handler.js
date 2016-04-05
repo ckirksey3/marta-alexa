@@ -13,6 +13,14 @@ function handleError(errorText, sessionObject, callback) {
   callback(true, errorText, "Error", errorText, "", sessionObject);
 }
 
+/** 
+* Credit to Steve Harrison
+* http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
+*/
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 /**
  * Filters the API results down to the event for a specific station and train direction
  * @param {Object} intent
@@ -35,7 +43,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 	var sessionObject = false;
 	var shouldEndSession = true;
 	var cardContents, speechText;
-	var cardTitle = station + " Station";
+	var cardTitle = station.capitalizeFirstLetter() + " Station";
 	var cardSubtitle = "MARTA Times";
 
 	if(direction) {
@@ -45,7 +53,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 				handleError("The Marta API is currently down", sessionObject, callback);
 			} else {
 				console.log(result)
-				speechText = "The next " + direction + " bound train will arrive at " + station + " station in " + result + " minutes";
+				speechText = "The next " + direction + " bound train will arrive at " + station.capitalizeFirstLetter() + " station in " + result + " minutes";
 				console.log("SPEECH TEXT: " + speechText);
 				cardContents = speechText;
 				callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
@@ -58,15 +66,21 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 				handleError("The Marta API is currently down", sessionObject, callback);
 			} else {
 				console.log(result)
-				speechText = "The " + station + " station has trains arriving";
+				speechText = "The " + station.capitalizeFirstLetter() + " station has trains arriving";
 				var directions = {
 					"N": "North",
 					"S": "South",
 					"E": "East",
 					"W": "West"
 				}
+				var hasSaidOneDirection = false;
 				result.forEach(function(event) {
 					if(event.direction in directions) {
+						if(hasSaidOneDirection) {
+							speechText += ", and"
+						} else {
+							hasSaidOneDirection = true;
+						}
 						speechText += " going " + directions[event.direction] + " in " + event.minutesUntilArrival + " minutes";
 
 						//remove the key so that we only list times for a direction once
