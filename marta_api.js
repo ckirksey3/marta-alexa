@@ -16,7 +16,7 @@ var Marta = function() {
  */
 Marta.prototype.getTime = function (station, direction, callback) {
 	responseParser = require('./marta_response_parser.js')
-	var api_key = "30e67a92-f98d-410d-a511-5a3233d838f2"//process.env.MARTA_API_KEY
+	var api_key = process.env.MARTA_API_KEY
 	unirest.get(martaApiBaseUrl + api_key)
 	.header("Accept", "application/json")
 	.end(function (result) {
@@ -42,7 +42,7 @@ Marta.prototype.getTime = function (station, direction, callback) {
  */
 Marta.prototype.getTimesByStation = function (station, callback) {
 	responseParser = require('./marta_response_parser.js')
-	var api_key = "30e67a92-f98d-410d-a511-5a3233d838f2"//process.env.MARTA_API_KEY
+	var api_key = process.env.MARTA_API_KEY
 	unirest.get(martaApiBaseUrl + api_key)
 	.header("Accept", "application/json")
 	.end(function (result) {
