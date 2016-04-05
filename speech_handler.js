@@ -37,32 +37,38 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 	var cardContents, speechText, cardTitle;
 
 	if(direction) {
-	//request an estimated arrival time for that station/direction from the Marta API
-	martaApiInstance.getTime(station, direction, function logResult(err, result) {
-		if(err) {
-			handleError("The Marta API is currently down", sessionObject, callback);
-		}
-		console.log(result)
-		speechText = "The next " + direction + " bound train will arrive at " + station + " station in " + result + " minutes";
-		cardTitle = direction + " bound train arrives at " + station + " in " + result + " minutes";
-	})
-	} else {
-	//request several arrival times for that station from the Marta API
-	martaApiInstance.getTimesByStation(station, function logResult(err, result) {
-	if(err) {
-		handleError("The Marta API is currently down", sessionObject, callback);
-	}
-		console.log(result)
-		speechText = "The " + station + " station has trains arriving ";
-		cardTitle = "The " + station + " station has trains arriving ";
-		result.forEach(function(event) {
-			speechText += "going " + direction + " in " + result + " minutes";
-			cardTitle += "going " + direction + " in " + result + " minutes";
+		//request an estimated arrival time for that station/direction from the Marta API
+		martaApiInstance.getTime(station, direction, function logResult(err, result) {
+			if(err) {
+				handleError("The Marta API is currently down", sessionObject, callback);
+			} else {
+				console.log(result)
+				speechText = "The next " + direction + " bound train will arrive at " + station + " station in " + result + " minutes";
+				cardTitle = direction + " bound train arrives at " + station + " in " + result + " minutes";
+				console.log("SPEECH TEXT: " + speechText);
+				callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+			}
 		})
-	})
+	} else {
+		//request several arrival times for that station from the Marta API
+		martaApiInstance.getTimesByStation(station, function logResult(err, result) {
+			if(err) {
+				handleError("The Marta API is currently down", sessionObject, callback);
+			} else {
+				console.log(result)
+				speechText = "The " + station + " station has trains arriving ";
+				cardTitle = "The " + station + " station has trains arriving ";
+				result.forEach(function(event) {
+					speechText += "going " + direction + " in " + result + " minutes";
+					cardTitle += "going " + direction + " in " + result + " minutes";
+				})
+				console.log("SPEECH TEXT: " + speechText);
+				callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+			}
+				
+		})
 	}
-	console.log("SPEECH TEXT: " + speechText);
-	callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+	
 	return;
 }
 
