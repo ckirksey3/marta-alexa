@@ -40,6 +40,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 		direction = intent.slots['Direction'].value;
 	} else {
 		handleError("Must specify a Marta station", sessionObject, callback);
+		return;
 	}
 
 	var sessionObject = false;
