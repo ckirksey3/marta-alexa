@@ -26,7 +26,7 @@ echoApp.decorateAppWithRoutes('/', app);
 
 //Handle Echo Launch Request with welcome message
 echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, userObject){
-    var speechText = "Welcome to the Marta App";
+    var speechText = "Welcome to the Marta Skill. Try asking me about trains arriving at Five Points Station.";
     var cardTitle = "Marta App Launched";
     var cardSubtitle = "userId " + userId;
     var cardContents = "Try a new command like 'Alexa, ask Marta when does the north bound train arrive at Midtown station'";
