@@ -10,7 +10,8 @@ var util = require('util')
 //Print any errors
 function handleError(errorText, sessionObject, callback) {
   console.log("Error: " + errorText);
-  callback(true, errorText, "Error", errorText, "", sessionObject);
+  var shouldEndSession = false;
+  callback(shouldEndSession, errorText + " Please try again.", "Error", errorText, "", sessionObject);
 }
 
 /** 
@@ -51,7 +52,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 		//request an estimated arrival time for that station/direction from the Marta API
 		martaApiInstance.getTime(station, direction, function logResult(err, result) {
 			if(err) {
-				handleError("The Marta API is currently down", sessionObject, callback);
+				handleError(err, sessionObject, callback);
 			} else {
 				console.log(result)
 				speechText = "The next " + direction + " bound train will arrive at " + toTitleCase(station) + " station in " + result + " minutes";
@@ -64,7 +65,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 		//request several arrival times for that station from the Marta API
 		martaApiInstance.getTimesByStation(station, function logResult(err, result) {
 			if(err) {
-				handleError("The Marta API is currently down", sessionObject, callback);
+				handleError(err, sessionObject, callback);
 			} else {
 				console.log(result)
 				speechText = "The " + toTitleCase(station) + " station has trains arriving";
