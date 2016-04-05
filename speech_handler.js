@@ -32,9 +32,11 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 		handleError("Must specify a Marta station", sessionObject, callback);
 	}
 
-	var cardSubtitle = "";
 	var sessionObject = false;
-	var cardContents, speechText, cardTitle;
+	var shouldEndSession = true;
+	var cardContents, speechText;
+	var cardTitle = station + " Station";
+	var cardSubtitle = "MARTA Times";
 
 	if(direction) {
 		//request an estimated arrival time for that station/direction from the Marta API
@@ -44,9 +46,9 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 			} else {
 				console.log(result)
 				speechText = "The next " + direction + " bound train will arrive at " + station + " station in " + result + " minutes";
-				cardTitle = direction + " bound train arrives at " + station + " in " + result + " minutes";
 				console.log("SPEECH TEXT: " + speechText);
-				callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+				cardContents = speechText;
+				callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
 			}
 		})
 	} else {
@@ -57,7 +59,6 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 			} else {
 				console.log(result)
 				speechText = "The " + station + " station has trains arriving";
-				cardTitle = "The " + station + " station has trains arriving";
 				var directions = {
 					"N": "North",
 					"S": "South",
@@ -67,7 +68,6 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 				result.forEach(function(event) {
 					if(event.direction in directions) {
 						speechText += " going " + directions[event.direction] + " in " + event.minutesUntilArrival + " minutes";
-						cardTitle += " going " + directions[event.direction] + " in " + event.minutesUntilArrival + " minutes";
 
 						//remove the key so that we only list times for a direction once
 						delete directions[event.direction]
@@ -75,7 +75,8 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 					
 				})
 				console.log("SPEECH TEXT: " + speechText);
-				callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+				cardContents = speechText;
+				callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
 			}
 		})
 	}

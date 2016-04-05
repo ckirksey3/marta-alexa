@@ -31,13 +31,14 @@ echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, 
     var cardSubtitle = "userId " + userId;
     var cardContents = "Try a new command like 'Alexa, ask Marta when does the north bound train arrive at Midtown station'";
     var sessionObject = false;
+    var shouldEndSession = true;
     if(!userObject){
         //no long term persistance for this use
     }
     else{
         //this user has a long term storage session 
     }
-    callback(false, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+    callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
 });
 
 //Handle Echo request for train time
