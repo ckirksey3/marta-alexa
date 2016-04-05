@@ -14,11 +14,12 @@ function handleError(errorText, sessionObject, callback) {
 }
 
 /** 
-* Credit to Steve Harrison
-* http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
+* Credit to Dexter
+* http://stackoverflow.com/questions/4878756/javascript-how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
 */
-function capitalizeFirstLetter(string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
 /**
@@ -43,7 +44,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 	var sessionObject = false;
 	var shouldEndSession = true;
 	var cardContents, speechText;
-	var cardTitle = station.capitalizeFirstLetter() + " Station";
+	var cardTitle = toTitleCase(station) + " Station";
 	var cardSubtitle = "MARTA Times";
 
 	if(direction) {
@@ -53,7 +54,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 				handleError("The Marta API is currently down", sessionObject, callback);
 			} else {
 				console.log(result)
-				speechText = "The next " + direction + " bound train will arrive at " + station.capitalizeFirstLetter() + " station in " + result + " minutes";
+				speechText = "The next " + direction + " bound train will arrive at " + toTitleCase(station) + " station in " + result + " minutes";
 				console.log("SPEECH TEXT: " + speechText);
 				cardContents = speechText;
 				callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
@@ -66,7 +67,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 				handleError("The Marta API is currently down", sessionObject, callback);
 			} else {
 				console.log(result)
-				speechText = "The " + station.capitalizeFirstLetter() + " station has trains arriving";
+				speechText = "The " + toTitleCase(station) + " station has trains arriving";
 				var directions = {
 					"N": "North",
 					"S": "South",
