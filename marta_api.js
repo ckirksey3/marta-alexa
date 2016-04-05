@@ -47,7 +47,6 @@ Marta.prototype.getTimesByStation = function (station, callback) {
 	.header("Accept", "application/json")
 	.end(function (result) {
 		console.log("Destination: " + station)
-		console.log("Direction: " + direction)
 		responseParser.prototype.getResultsByStation(result.body, station, function getEvent(events){
 			if(events.length > 0) {
 				results = []
