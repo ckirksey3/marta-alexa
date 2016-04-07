@@ -26,7 +26,7 @@ echoApp.decorateAppWithRoutes('/', app);
 
 //Handle Echo Launch Request with welcome message
 echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, userObject){
-    var speechText = "Welcome to the Marta Skill. Try asking me about trains arriving at Five Points Station.";
+    var speechText = "Welcome to the Marta Skill. Try asking me about trains arriving at Midtown station";
     var cardTitle = "Marta Skill Launched";
     var cardSubtitle = "Get your train times here!";
     var cardContents = "Try a new command like 'Alexa, ask Marta when does the north bound train arrive at Midtown station'";
@@ -53,12 +53,12 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
           return;
         }
     } else if(intent.name === 'AMAZON.HelpIntent') {
-      var speechText = "Try asking me about the arrival times for different train stations by saying 'What are the times for Midtown station' or " + 
-        "request a specific direction like 'Ask MARTA for trains at Five Points station going East'";
+      var speechText = "Try asking me about the arrival times for different train stations by saying 'What are the times for the Airport' or " + 
+        "request a specific direction like 'Ask MARTA for trains at Midtown station going North'";
       var cardTitle = "Marta Help";
       var cardSubtitle = "Hope this helps";
-      var cardContents = "Try asking me about the arrival times for different train stations by saying 'What are the times for Midtown station' or " +
-        "request a specific direction like 'Ask MARTA for trains at Five Points station going East'";
+      var cardContents = "Try asking me about the arrival times for different train stations by saying 'What are the times for the Airport' or " + 
+        "request a specific direction like 'Ask MARTA for trains at Midtown station going North'";
       var sessionObject = false;
       var shouldEndSession = true;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
