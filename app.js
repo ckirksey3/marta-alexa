@@ -27,11 +27,11 @@ echoApp.decorateAppWithRoutes('/', app);
 //Handle Echo Launch Request with welcome message
 echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, userObject){
     var speechText = "Welcome to the Marta Skill. Try asking me about trains arriving at Five Points Station.";
-    var cardTitle = "Marta App Launched";
-    var cardSubtitle = "userId " + userId;
+    var cardTitle = "Marta Skill Launched";
+    var cardSubtitle = "Get your train times here!";
     var cardContents = "Try a new command like 'Alexa, ask Marta when does the north bound train arrive at Midtown station'";
     var sessionObject = false;
-    var shouldEndSession = true;
+    var shouldEndSession = false;
     if(!userObject){
         //no long term persistance for this use
     }
@@ -52,6 +52,22 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
           echoApp.returnErrorResponse(callback, "Missing required inputs, please try again");
           return;
         }
+    } else if(intent.name === 'AMAZON.HelpIntent') {
+      var speechText = "Try asking me about the arrival times for different trains by saying 'Alexa ask Marta what are the times for Midtown station'";
+      var cardTitle = "Marta Help";
+      var cardSubtitle = "Hope this helps";
+      var cardContents = "Try asking me about the arrival times for different trains by saying 'Alexa ask Marta what are the times for Midtown station'";
+      var sessionObject = false;
+      var shouldEndSession = true;
+      callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+    } else if(intent.name === 'AMAZON.StopIntent') {
+      var speechText = "Goodbye";
+      var cardTitle = "Marta Session Closed";
+      var cardSubtitle = "Have a great day";
+      var cardContents = "";
+      var sessionObject = false;
+      var shouldEndSession = true;
+      callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
     } else {
       echoApp.returnErrorResponse(callback, "Sorry, nobody has implemented the command "+intent.name);
       return;
