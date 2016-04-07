@@ -10,8 +10,8 @@ var util = require('util')
 //Print any errors
 function handleError(errorText, sessionObject, callback) {
   console.log("Error: " + errorText);
-  var shouldEndSession = false;
-  callback(shouldEndSession, errorText + " Please try again.", "Error", errorText, "", sessionObject);
+  var shouldEndSession = true;
+  callback(shouldEndSession, errorText + " Please try again.", "Error", "Something went wrong", errorText, sessionObject);
 }
 
 /** 

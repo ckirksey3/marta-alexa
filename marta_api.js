@@ -57,7 +57,7 @@ Marta.prototype.getTimesByStation = function (station, callback) {
 				})
 				callback(null, results)
 			} else {
-				callback("No events found for that station.", null)
+				callback("No events found for " + station + " station", null)
 			}
 		})
 	})
