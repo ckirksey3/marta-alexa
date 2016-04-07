@@ -53,10 +53,10 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
           return;
         }
     } else if(intent.name === 'AMAZON.HelpIntent') {
-      var speechText = "Try asking me about the arrival times for different trains by saying 'Alexa ask Marta what are the times for Midtown station'";
+      var speechText = "Try asking me about the arrival times for different train stations by saying 'What are the times for Midtown station'";
       var cardTitle = "Marta Help";
       var cardSubtitle = "Hope this helps";
-      var cardContents = "Try asking me about the arrival times for different trains by saying 'Alexa ask Marta what are the times for Midtown station'";
+      var cardContents = "Try asking me about the arrival times for different train stations by saying 'What are the times for Midtown station'";
       var sessionObject = false;
       var shouldEndSession = true;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
