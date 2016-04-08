@@ -6,6 +6,7 @@ var SpeechHandler = function() {}
 var martaApi = require('./marta_api.js')
 var martaApiInstance = new martaApi()
 var util = require('util')
+var constants = require('./marta_constants.js');
 
 //Print any errors
 function handleError(errorText, sessionObject, callback) {
@@ -47,7 +48,7 @@ SpeechHandler.prototype.handleMartaRequest = function (intent, callback) {
 	var shouldEndSession = true;
 	var cardContents, speechText;
 	var cardTitle = toTitleCase(station) + " Station";
-	var cardSubtitle = "MARTA Times";
+	var cardSubtitle = constants.SKILL_NAME + " Times";
 
 	if(direction) {
 		//request an estimated arrival time for that station/direction from the Marta API

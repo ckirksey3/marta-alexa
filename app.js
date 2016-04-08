@@ -10,6 +10,7 @@ var url = require('url');
 var verifier = require('alexa-verifier');
 var redisURL = url.parse(process.env.REDISCLOUD_URL); //Heroku Redis
 var SpeechHandler = require('./speech_handler.js')
+var constants = require('./marta_constants.js');
 var speechHandlerInstance = new SpeechHandler()
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 client.auth(redisURL.auth.split(":")[1]);
@@ -62,10 +63,10 @@ echoApp.decorateAppWithRoutes('/', app);
 
 //Handle Echo Launch Request with welcome message
 echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, userObject){
-    var speechText = "Welcome to the Marta Skill. Try asking me about trains arriving at Midtown station";
-    var cardTitle = "Marta Skill Launched";
+    var speechText = "Welcome to the " + constants.SKILL_NAME + " Skill. Try asking me about trains arriving at Midtown station";
+    var cardTitle = constants.SKILL_NAME + " Skill Launched";
     var cardSubtitle = "Get your train times here!";
-    var cardContents = "Try a new command like 'Alexa, ask Marta when does the north bound train arrive at Midtown station'";
+    var cardContents = "Try a new command like 'Alexa, ask " + constants.SKILL_NAME + " when does the north bound train arrive at Midtown station'";
     var sessionObject = false;
     var shouldEndSession = false;
     if(!userObject){
@@ -90,17 +91,17 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
         }
     } else if(intent.name === 'AMAZON.HelpIntent') {
       var speechText = "Try asking me about the arrival times for different train stations by saying 'What are the times for the Airport' or " + 
-        "request a specific direction like 'Ask MARTA for trains at Midtown station going North'";
-      var cardTitle = "Marta Help";
+        "request a specific direction like 'Ask " + constants.SKILL_NAME + " for trains at Midtown station going North'";
+      var cardTitle = constants.SKILL_NAME + " Help";
       var cardSubtitle = "Hope this helps";
       var cardContents = "Try asking me about the arrival times for different train stations by saying 'What are the times for the Airport' or " + 
-        "request a specific direction like 'Ask MARTA for trains at Midtown station going North'";
+        "request a specific direction like 'Ask " + constants.SKILL_NAME + " for trains at Midtown station going North'";
       var sessionObject = false;
       var shouldEndSession = true;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
     } else if(intent.name === 'AMAZON.StopIntent') {
       var speechText = "Goodbye";
-      var cardTitle = "Marta Session Closed";
+      var cardTitle = constants.SKILL_NAME + " Session Closed";
       var cardSubtitle = "Have a great day";
       var cardContents = "";
       var sessionObject = false;
