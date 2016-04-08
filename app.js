@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var AmazonEchoApp = require('node-alexa');
 var redis = require('redis');
 var url = require('url');
+var verifier = require('alexa-verifier');
 var redisURL = url.parse(process.env.REDISCLOUD_URL); //Heroku Redis
 var SpeechHandler = require('./speech_handler.js')
 var speechHandlerInstance = new SpeechHandler()
@@ -14,6 +15,41 @@ var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_chec
 client.auth(redisURL.auth.split(":")[1]);
 
 //Setup for Express server
+
+//thanks @mreinstein to for writing this example https://github.com/mreinstein/alexa-verifier
+app.use(function(req, res, next) {
+  if (!req.headers.signaturecertchainurl) {
+    return next();
+  }
+  req._body = true;
+  req.rawBody = '';
+  req.on('data', function(data) {
+    return req.rawBody += data;
+  });
+  return req.on('end', function() {
+    var cert_url, er, requestBody, signature;
+    try {
+      req.body = JSON.parse(req.rawBody);
+    } catch (_error) {
+      er = _error;
+      req.body = {};
+    }
+    cert_url = req.headers.signaturecertchainurl;
+    signature = req.headers.signature;
+    requestBody = req.rawBody;
+    return verifier(cert_url, signature, requestBody, function(er) {
+      if (er) {
+        console.error('error validating the alexa cert:', er);
+        return res.status(401).json({
+          status: 'failure',
+          reason: er
+        });
+      } else {
+        return next();
+      }
+    });
+  });
+});
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.set('port', (process.env.PORT || 5000));

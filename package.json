@@ -16,7 +16,8 @@
     "redis": "^0.12.1",
     "url": "^0.10.3",
     "util": "^0.10.3",
-    "nodeunit": "^0.9.1"
+    "nodeunit": "^0.9.1",
+    "alexa-verifier": "^0.0.3"
   },
   "engines": {
     "node": "0.8.x",
