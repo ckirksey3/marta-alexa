@@ -1,3 +1,3 @@
 module.exports = Object.freeze({
-    SKILL_NAME: 'MARTA'
+    SKILL_NAME: 'Times for MARTA'
 });
