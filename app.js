@@ -113,6 +113,16 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
     }
 });
 
+//Handle Echo Session End Request
+echoApp.on(echoApp.TYPE_SESSION_ENDED_REQUEST, function(callback, userId, sessionInfo, userObject){
+    var speechText = "Are there train times that I can help you with?";
+    var cardTitle = constants.SKILL_NAME + " Skill Waiting for a Response";
+    var cardSubtitle = "";
+    var sessionObject = false;
+    var shouldEndSession = false;
+    callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+});
+
 app.listen(app.get('port'), function() {
     console.log("Node app is running at localhost:" + app.get('port'));
 });
