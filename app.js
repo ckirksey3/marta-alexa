@@ -69,13 +69,14 @@ echoApp.on(echoApp.TYPE_LAUNCH_REQUEST, function(callback, userId, sessionInfo, 
     var cardContents = "Try a new command like 'Alexa, ask " + constants.SKILL_NAME + " when does the north bound train arrive at Midtown station'";
     var sessionObject = false;
     var shouldEndSession = false;
+    var rempromptText = "What stations would you like to know about? Say quit to cancel"
     if(!userObject){
         //no long term persistance for this use
     }
     else{
         //this user has a long term storage session 
     }
-    callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+    callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject, rempromptText);
 });
 
 //Handle Echo request for train time
@@ -98,7 +99,8 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
         "request a specific direction like 'Ask " + constants.SKILL_NAME + " for trains at Midtown station going North'";
       var sessionObject = false;
       var shouldEndSession = false;
-      callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+      var rempromptText = "What stations would you like to know about? Say quit to cancel"
+      callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject, rempromptText);
     } else if(intent.name === 'AMAZON.StopIntent') {
       var speechText = "Goodbye";
       var cardTitle = constants.SKILL_NAME + " Session Closed";
@@ -108,20 +110,15 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
       var shouldEndSession = true;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
     } else {
-      echoApp.returnErrorResponse(callback, "Sorry, nobody has implemented the command "+intent.name);
+      echoApp.returnErrorResponse(callback, "Sorry, nobody has implemented the command " + intent.name);
       return;
     }
 });
 
 //Handle Echo Session End Request
 echoApp.on(echoApp.TYPE_SESSION_ENDED_REQUEST, function(callback, userId, sessionInfo, userObject){
-    var speechText = "Are there train times that I can help you with?";
-    var cardTitle = constants.SKILL_NAME + " Skill Waiting for a Response";
-    var cardSubtitle = "";
-    var cardContents = "";
-    var sessionObject = false;
     var shouldEndSession = false;
-    callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
+    callback(shouldEndSession);
 });
 
 app.listen(app.get('port'), function() {
