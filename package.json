@@ -10,7 +10,7 @@
     "method-override": "^2.3.1",
     "request": "^2.51.0",
     "unirest": "^0.4.2",
-    "node-alexa": "git://github.com/robrighter/node-alexa.git",
+    "node-alexa": "git://github.com/ckirksey3/node-alexa.git",
     "ejs": "~0.7.1",
     "require-dir": "^0.3.0",
     "redis": "^0.12.1",
