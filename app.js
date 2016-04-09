@@ -97,7 +97,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
       var cardContents = "Try asking me about the arrival times for different train stations by saying 'What are the times for the Airport' or " + 
         "request a specific direction like 'Ask " + constants.SKILL_NAME + " for trains at Midtown station going North'";
       var sessionObject = false;
-      var shouldEndSession = true;
+      var shouldEndSession = false;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
     } else if(intent.name === 'AMAZON.StopIntent') {
       var speechText = "Goodbye";
@@ -105,7 +105,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
       var cardSubtitle = "Have a great day";
       var cardContents = "";
       var sessionObject = false;
-      var shouldEndSession = false;
+      var shouldEndSession = true;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
     } else {
       echoApp.returnErrorResponse(callback, "Sorry, nobody has implemented the command "+intent.name);
