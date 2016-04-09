@@ -105,7 +105,7 @@ echoApp.on(echoApp.TYPE_INTENT_REQUEST, function(callback, userId, sessionInfo, 
       var cardSubtitle = "Have a great day";
       var cardContents = "";
       var sessionObject = false;
-      var shouldEndSession = true;
+      var shouldEndSession = false;
       callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
     } else {
       echoApp.returnErrorResponse(callback, "Sorry, nobody has implemented the command "+intent.name);
