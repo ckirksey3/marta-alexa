@@ -118,6 +118,7 @@ echoApp.on(echoApp.TYPE_SESSION_ENDED_REQUEST, function(callback, userId, sessio
     var speechText = "Are there train times that I can help you with?";
     var cardTitle = constants.SKILL_NAME + " Skill Waiting for a Response";
     var cardSubtitle = "";
+    var cardContents = "";
     var sessionObject = false;
     var shouldEndSession = false;
     callback(shouldEndSession, speechText, cardTitle, cardSubtitle, cardContents, sessionObject);
