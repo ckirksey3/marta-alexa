@@ -10,13 +10,19 @@ An Amazon Echo app for checking train arrival times for Atlanta's MARTA system. 
       "slots": [
         {
           "name": "Direction",
-          "type": "LITERAL"
+          "type": "DIRECTION"
         },
         {
           "name": "Station",
-          "type": "Literal"
+          "type": "STATION"
         }
       ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
     }
   ]
 }
@@ -35,19 +41,42 @@ Lakewood | Lenox | Lindbergh Center | Medical Center | Midtown | North Avenue | 
 Oakland City | Peachtree Center | Sandy Springs | Vine City | West End | West Lake 
 
 ### Sample Utterances
+Marta when does the {Direction} bound train arrive in {Station} station
 
-Marta when does the {North|Direction} bound train arrive in {Midtown|Station} station
+Marta when does the {Direction} train arrive in {Station} station
 
-Marta when does the {East|Direction} train arrive in {Five Points|Station} station
+Marta when does the {Direction} bound train arrive in {Station}
 
-Marta when does the {South|Direction} bound train arrive in {Midtown|Station}
+Marta when does the {Direction} train arrive in {Station}
 
-Marta when does the {West|Direction} train arrive in {Five Points|Station}
+Marta when will the {Direction} bound train arrive in {Station} station
 
-Marta when will the {North|Direction} bound train arrive in {Airport|Station} station
+Marta when will the {Direction} train arrive in {Station} station
 
-Marta when will the {South|Direction} train arrive in {North Avenue|Station} station
+Marta when will the {Direction} bound train arrive in {Station}
 
-Marta when will the {North|Direction} bound train arrive in {Lenox|Station}
+Marta for the {Direction} train at {Station} station
 
-Marta when will the {South|Direction} train arrive in {Arts Center|Station}
+Marta about {Station} station's {Direction} trains
+
+Marta for {Station} times
+
+Marta for {Station} station times
+
+Marta about {Station} station
+
+Marta about {Station}
+
+Marta when the train gets to {Station}
+
+Marta for trains at {Station} station going {Direction}
+
+Marta for times at the {Station}
+
+Marta for times at {Station} station
+
+Marta what trains are at {Station} station
+
+Marta what are the times for {Station} station
+
+Marta what are the times for the {Station}
