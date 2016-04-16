@@ -1,5 +1,5 @@
 # MartaTimes
-An Amazon Echo app for checking train arrival times for Atlanta's MARTA system. In order to get it working, you must [request a Marta API key](http://www.itsmarta.com/developers/registrationform-rtt.aspx) and set it in process.env.MARTA_API_KEY.
+An Amazon Echo app for checking train arrival times for Atlanta's MARTA system. In order to get it working, you must [request a Marta API key](http://www.itsmarta.com/developers/registrationform-rtt.aspx) and set it in process.env.MARTA_API_KEY. For more about my development process and how to build your own implmentation, see [my project on hackster.io](https://www.hackster.io/ckirksey/train-times-for-amazon-alexa-skill-df2984).
 
 ### Intent Schema
 ```
